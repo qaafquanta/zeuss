@@ -6,6 +6,7 @@ import type { Application, NextFunction, Request, Response } from "express";
 import express, { urlencoded, type Express } from "express";
 import authRouter from "./routes/auth.route.js";
 import eventRouter from "./routes/event.route.js";
+import transactionRoute from "./routes/transaction.route.js";
 
 const PORT = process.env.PORT;
 
@@ -48,6 +49,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/event", eventRouter);
+app.use("/api/transaction", transactionRoute);
 
 //error middleware
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
