@@ -21,6 +21,7 @@ export default function TransactionPage({
         "http://localhost:8099/transaction/create-transaction",
         {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             eventId: slug,
