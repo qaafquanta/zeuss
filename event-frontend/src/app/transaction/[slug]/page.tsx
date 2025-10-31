@@ -12,8 +12,28 @@ export default function TransactionPage({
   const { slug } = params;
 
   const [seatCount, setSeatCount] = useState(1);
+  const [voucherCode, setVoucherCode] = useState("");
+  const [points, setPoints] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState(0);
+
   const pricePerSeat = 20000;
-  const totalPrice = seatCount * pricePerSeat;
+  const baseTotal = seatCount * pricePerSeat;
+  const finalTotal = Math.max(baseTotal - discountAmount, 0);
+
+  const applyDiscount = () => {
+    let discount = 0;
+
+    // contoh logika sederhana
+    if (voucherCode.toUpperCase() === "DISKON10") {
+      discount += baseTotal * 0.1; // 10%
+    }
+
+    if (points > 0) {
+      discount += points * 100; // 1 poin = Rp100
+    }
+
+    setDiscountAmount(discount);
+  };
 
   const handleBooking = async () => {
     try {
@@ -26,6 +46,9 @@ export default function TransactionPage({
           body: JSON.stringify({
             eventId: slug,
             quantity: seatCount,
+            voucherCode,
+            points,
+            totalPrice: finalTotal,
           }),
         }
       );
@@ -50,6 +73,7 @@ export default function TransactionPage({
           <h2 className="text-2xl font-bold mb-2">Book Seat</h2>
           <p className="text-sm text-white/60 mb-4">Event ID: {slug}</p>
 
+          {/* Seat Counter */}
           <div className="flex items-center gap-4 mb-4">
             <button
               onClick={() => setSeatCount((c) => Math.max(1, c - 1))}
@@ -68,10 +92,60 @@ export default function TransactionPage({
             </button>
           </div>
 
-          <div className="text-lg font-semibold mb-6">
-            Total Harga:{" "}
+          {/* Voucher Input */}
+          <div className="mb-3">
+            <label className="block text-sm mb-1 text-white/70">
+              Voucher Code
+            </label>
+            <div className="flex gap-2">
+              <input
+                value={voucherCode}
+                onChange={(e) => setVoucherCode(e.target.value)}
+                placeholder="Masukkan kode voucher"
+                className="flex-1 p-2 rounded-lg bg-white/10 border border-white/20 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+              <button
+                onClick={applyDiscount}
+                type="button"
+                className="px-4 bg-indigo-500 rounded-lg hover:bg-indigo-600 transition"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+
+          {/* Point Input */}
+          <div className="mb-4">
+            <label className="block text-sm mb-1 text-white/70">
+              Gunakan Poin
+            </label>
+            <input
+              type="number"
+              value={points}
+              onChange={(e) => setPoints(parseInt(e.target.value) || 0)}
+              placeholder="Masukkan jumlah poin"
+              className="w-full p-2 rounded-lg bg-white/10 border border-white/20 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+          </div>
+
+          {/* Price Summary */}
+          <div className="text-lg font-semibold mb-2">
+            Total Harga Awal:{" "}
             <span className="text-indigo-400">
-              Rp {totalPrice.toLocaleString("id-ID")}
+              Rp {baseTotal.toLocaleString("id-ID")}
+            </span>
+          </div>
+
+          {discountAmount > 0 && (
+            <div className="text-md text-green-400 mb-2">
+              Diskon: -Rp {discountAmount.toLocaleString("id-ID")}
+            </div>
+          )}
+
+          <div className="text-xl font-bold mb-6">
+            Total Bayar:{" "}
+            <span className="text-indigo-400">
+              Rp {finalTotal.toLocaleString("id-ID")}
             </span>
           </div>
 
@@ -79,7 +153,7 @@ export default function TransactionPage({
             onClick={handleBooking}
             className="w-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:scale-[1.02] transition"
           >
-            Continue to Booking
+            Continue To Payment
           </button>
         </div>
       </div>
