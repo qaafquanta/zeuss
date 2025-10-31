@@ -35,7 +35,7 @@ const app: Application = express();
 //define app basic middleware
 app.use(
   cors({
-    origin: ["http://localhost:8099", "http://localhost:3000"], // alamat frontend
+    origin: ["http://localhost:8099","http://localhost:3000"], // alamat frontend
     credentials: true, // penting agar cookie bisa dikirim
   })
 );

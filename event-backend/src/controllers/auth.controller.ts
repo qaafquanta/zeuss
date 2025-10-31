@@ -3,6 +3,8 @@ import prisma from "../prisma.js"
 import { hashPassword } from "../utils/hashPassword.js";
 import {compare} from 'bcrypt'
 import {createToken} from "../utils/createToken.js"
+import {v4 as uuid} from 'uuid'
+import { getThreeMonthsFromNow } from "../functions/function.js";
 
 export interface IAuthController {
     register(req: Request, res: Response,next:NextFunction): Promise<void>
@@ -17,12 +19,16 @@ export class AuthController implements IAuthController {
     async register(req:Request,res:Response){
     try{
         const { username,email,password,referralCode,role } = req.body;
+
+        //<<<<<<< CONVERT REFERRAL NUMBER TO REFERRER USER ID
         let referredById1:string|null = null
         const fetchRef = await prisma.user.findUnique({
             where: {referralNumber : referralCode},
             select: {id:true}
         })
         referredById1 = await fetchRef?.id ?? null
+        console.log(referredById1)
+       //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         
         const existingUser = await prisma.user.findUnique({
             where: { email },
@@ -36,8 +42,12 @@ export class AuthController implements IAuthController {
             return;
             }
 
+        //Create User Id
+        const userId = uuid()
+        //Create User Table
         await prisma.user.create({
             data:{
+                id : userId,
                 username,
                 email,
                 referredById: referredById1,
@@ -45,6 +55,23 @@ export class AuthController implements IAuthController {
                 password: await hashPassword(password)
             }
         })
+
+        //Create Point Table (JIKA MENGGUNAKAN REFERRAL CODE)
+        if(referredById1){
+            // console.log('user terdeteksi menggunakan referral code: point di create')
+            await prisma.point.create({
+                data:{
+                    userId,
+                    amount: 10000,
+                    expiresAt: getThreeMonthsFromNow(),
+                    isUsed: false
+                }
+            })
+        }else{
+            // console.log('user terdeteksi tidak menggunakan referral code: point tidak di create')
+        }
+        
+
         res.status(200).send({
             message:"Registration Success",
             success: true
