@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
+import multer from "multer";
+import path from "path";
+import { cloudinary } from "../configs/cloudinary.config.js";
 
 const prisma = new PrismaClient();
 
@@ -121,6 +124,7 @@ export const getEventById = async (req: Request, res: Response) => {
 // CREATE event baru
 export const createEvent = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     const {
       organizerId,
       name,
@@ -134,8 +138,15 @@ export const createEvent = async (req: Request, res: Response) => {
       price,
       availableSeats,
       totalSeats,
-      imageUrl,
     } = req.body;
+
+    const imageUrl = req.file;
+
+    if (!imageUrl) {
+      return res.status(400).json({ message: "Profile picture not found" });
+    }
+
+    const uploadResult = await cloudinary.uploader.upload(imageUrl?.path);
 
     const newEvent = await prisma.event.create({
       data: {
@@ -148,10 +159,10 @@ export const createEvent = async (req: Request, res: Response) => {
         address,
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        price,
-        availableSeats,
-        totalSeats,
-        imageUrl,
+        price: parseInt(price),
+        availableSeats: parseInt(availableSeats),
+        totalSeats: parseInt(totalSeats),
+        imageUrl: uploadResult.secure_url,
       },
     });
 

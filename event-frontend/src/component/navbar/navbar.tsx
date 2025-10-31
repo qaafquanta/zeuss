@@ -1,6 +1,6 @@
 "use client";
 
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
@@ -16,10 +16,10 @@ export default function Navbar() {
   ];
 
   interface User {
-  username: string;
-  email: string;
-  role:string;
-}
+    username: string;
+    email: string;
+    role: string;
+  }
 
   const [user, setUser] = useState<User | null>(null);
 
@@ -32,7 +32,7 @@ export default function Navbar() {
         // if (!res.ok) throw new Error("Not logged in");
 
         const data = await res.json();
-        console.log(data)
+        console.log(data);
         setUser(data.user);
       } catch (err) {
         setUser(null); // token tidak valid atau belum login
@@ -47,22 +47,18 @@ export default function Navbar() {
       method: "POST",
       credentials: "include",
     });
-    const data = res.json()
-    console.log(data)
-    if(res.ok){
+    const data = res.json();
+    console.log(data);
+    if (res.ok) {
       setUser(null);
-      alert("berhasil logout")
+      alert("berhasil logout");
     }
-    
   };
 
   return (
     <nav className="font-rethink fixed top-0 left-0 w-full z-50 bg-gray-900 backdrop-blur-md shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <Link
-          href="/"
-          className="text-2xl font-bold text-indigo-500"
-        >
+        <Link href="/" className="text-2xl font-bold text-indigo-500">
           Zeuss<span className="text-gray-800"></span>
         </Link>
 
@@ -84,22 +80,18 @@ export default function Navbar() {
         >
           {open ? <X size={28} /> : <Menu size={28} />}
         </button>
-        {
-          user ? 
+        {user ? (
           <div className="flex gap-5">
             <span>{user.username}</span>
-            <button
-              onClick={handleLogout}
-              className="hover:bg-white/20"
-            >Logout
-            </button> 
+            <button onClick={handleLogout} className="hover:bg-white/20">
+              Logout
+            </button>
           </div>
-            
-          : 
-          <p>lu belum login bangsat</p>
-        }
+        ) : (
+          <p></p>
+        )}
       </div>
-      
+
       {open && (
         <div className="md:hidden bg-white shadow-md">
           {navLinks.map((link) => (
