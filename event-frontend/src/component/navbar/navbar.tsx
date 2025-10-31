@@ -80,7 +80,7 @@ export default function Navbar() {
         >
           {open ? <X size={28} /> : <Menu size={28} />}
         </button>
-        {user ? (
+        {/* {user ? (
           <div className="flex gap-5">
             <span>{user.username}</span>
             <button onClick={handleLogout} className="hover:bg-white/20">
@@ -89,7 +89,7 @@ export default function Navbar() {
           </div>
         ) : (
           <p></p>
-        )}
+        )} */}
       </div>
 
       {open && (

@@ -15,8 +15,9 @@ export default function EventForm() {
     endDate: "",
     price: "",
     totalSeats: "",
-    imageUrl: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -25,25 +26,46 @@ export default function EventForm() {
     });
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const form = new FormData();
+    form.append("organizerId", formData.organizerId);
+    form.append("name", formData.name);
+    form.append("description", formData.description);
+    form.append("category", formData.category);
+    form.append("location", formData.location);
+    form.append("city", formData.city);
+    form.append("address", formData.address);
+    form.append("startDate", formData.startDate);
+    form.append("endDate", formData.endDate);
+    form.append("price", formData.price);
+    form.append("availableSeats", formData.totalSeats);
+    form.append("totalSeats", formData.totalSeats);
+
+    if (imageFile) {
+      form.append("imageUrl", imageFile);
+    }
+
     try {
-      await fetch("http://localhost:8099/event/create", {
+      const res = await fetch("http://localhost:8099/event/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          availableSeats: parseInt(formData.totalSeats),
-          totalSeats: parseInt(formData.totalSeats),
-          price: parseInt(formData.price),
-        }),
+        body: form,
       });
+
+      if (!res.ok) throw new Error("Upload gagal");
 
       alert("Create New Event Successfully");
 
+      // reset form
       setFormData({
         organizerId: "",
         name: "",
@@ -56,8 +78,9 @@ export default function EventForm() {
         endDate: "",
         price: "",
         totalSeats: "",
-        imageUrl: "",
       });
+      setImageFile(null);
+      setPreview("");
     } catch (error) {
       console.error(error);
       alert("Failed to Create New Event");
@@ -75,7 +98,6 @@ export default function EventForm() {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Left Column */}
           <input
             name="organizerId"
             placeholder="Organizer ID"
@@ -157,13 +179,23 @@ export default function EventForm() {
             onChange={handleChange}
             className="input-style"
           />
-          <input
-            name="imageUrl"
-            placeholder="Image URL"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            className="input-style"
-          />
+
+          {/* === Upload File === */}
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="input-style"
+            />
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="mt-3 w-full h-48 object-cover rounded-xl border border-white/30"
+              />
+            )}
+          </div>
         </div>
 
         <button
@@ -174,7 +206,6 @@ export default function EventForm() {
         </button>
       </form>
 
-      {/* Tailwind Inline Styles */}
       <style jsx>{`
         .input-style {
           @apply w-full p-3 rounded-xl border border-white/40 bg-white/30 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/60 transition-all duration-200;
