@@ -178,7 +178,7 @@ export default async function Page({ params }: { params: Params }) {
                     </div>
 
                     <div className="flex gap-2 mt-3">
-                      <Link href={`/event/${event.id}/book`}>
+                      <Link href={`/transaction/${event.id}`}>
                         <div className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-medium hover:scale-[1.02] transition">
                           Book Seat
                         </div>
