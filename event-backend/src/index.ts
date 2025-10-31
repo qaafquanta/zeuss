@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config();
-import cors from 'cors';
-import cookieParser from "cookie-parser"
-import type {Application, NextFunction, Request,Response} from 'express'
-import express, {urlencoded, type Express} from 'express'
-import authRouter from "./routes/auth.route.js"
-import eventRouter from "./routes/event.route.js"
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import type { Application, NextFunction, Request, Response } from "express";
+import express, { urlencoded, type Express } from "express";
+import authRouter from "./routes/auth.route.js";
+import eventRouter from "./routes/event.route.js";
+import transactionRoute from "./routes/transaction.route.js";
 
 const PORT = process.env.PORT;
 
@@ -34,12 +35,12 @@ const app: Application = express();
 //define app basic middleware
 app.use(
   cors({
-    origin: ["http://localhost:8099","http://localhost:3001"], // alamat frontend
+    origin: ["http://localhost:8099", "http://localhost:3000"], // alamat frontend
     credentials: true, // penting agar cookie bisa dikirim
   })
 );
-app.use(express.json()) // for receive req.body
-app.use(cookieParser())
+app.use(express.json()); // for receive req.body
+app.use(cookieParser());
 
 //define app main router
 app.get("/", (req: Request, res: Response) => {
@@ -48,6 +49,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/event", eventRouter);
+app.use("/api/transaction", transactionRoute);
 
 //error middleware
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {

@@ -22,9 +22,9 @@ export default function Home() {
               </h1>
             </div>
             <p className=" font-bold text-white/80">
-            We Don't Just Plan Events — We Create Experiences!
-          </p>
-          </div>   
+              We Don`t Just Plan Events — We Create Experiences!
+            </p>
+          </div>
         </div>
         <div className="text-4xl font-serif font-bold text-center"></div>
       </div>
