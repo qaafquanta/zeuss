@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 type Event = {
   id: string;
   name: string;
-  imageurl: string | null;
+  imageUrl: string | null;
   startDate: string;
   location: string;
 };
@@ -28,6 +28,8 @@ export default function UpcomingEvents() {
     fetchEvents();
   }, []);
 
+  console.log(events);
+
   return (
     <section className="py-16 px-5 md:px-20 bg-black font-rethink">
       <h2 className="text-3xl md:text-4xl font-bold mb-10 text-transparent bg-gradient-to-br from-indigo-300 via-indigo-700 to-indigo-900 bg-clip-text">
@@ -43,8 +45,8 @@ export default function UpcomingEvents() {
             >
               <div className="relative w-full h-48 md:h-56">
                 <Image
-                  src={event.imageurl || "/fallback.jpg"}
-                  alt={event.name}
+                  src={event.imageUrl || "/fallback.jpg"}
+                  alt={event.name || "Event image"}
                   fill
                   className="object-cover"
                 />

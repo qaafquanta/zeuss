@@ -1,6 +1,7 @@
 // app/event/[id]/page.tsx
 import Link from "next/link";
 import ButtonEventDetail from "@/component/(eventdetail)/buttoneventdetail";
+import { url } from "inspector";
 
 type Params = {
   slug: string;
@@ -64,15 +65,15 @@ function formatDate(date?: string) {
 }
 
 export default async function Page({ params }: { params: Params }) {
-  console.log("hi");
   const { slug } = params;
-  console.log(slug);
   const event = await fetchEvent(slug);
 
   // if (!event) {
   //   // optional: show notFound page
   //   notFound();
   // }
+
+  console.log(event);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#05102a] via-[#071033] mt-16 to-[#0b0920] text-white py-12">
@@ -100,7 +101,7 @@ export default async function Page({ params }: { params: Params }) {
                 <div
                   className="w-full h-[420px] bg-gradient-to-br from-purple-800 via-indigo-900 to-blue-800 flex items-end"
                   style={{
-                    backgroundImage: `url(${event.imageUrl})`,
+                    backgroundImage: `url("${event?.imageUrl}")`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}

@@ -142,7 +142,7 @@ export default function EventList() {
                 >
                   {/* PRICE BADGE */}
                   <div className="absolute top-4 left-4 z-20">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-indigo-500/85 to-blue-600/85 text-white shadow-[0_10px_30px_rgba(79,70,229,0.28)]">
+                    <span className="inline-flex items-center px-3 py-1 rounded-xl text-sm font-semibold  text-white backdrop-blur">
                       {event.price ?? "Free"}
                     </span>
                   </div>
