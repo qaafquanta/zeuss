@@ -101,7 +101,7 @@ export default function TransactionPage({
               <input
                 value={voucherCode}
                 onChange={(e) => setVoucherCode(e.target.value)}
-                placeholder="Masukkan kode voucher"
+                placeholder="Input voucher code"
                 className="flex-1 p-2 rounded-lg bg-white/10 border border-white/20 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
               <button
@@ -117,7 +117,7 @@ export default function TransactionPage({
           {/* Point Input */}
           <div className="mb-4">
             <label className="block text-sm mb-1 text-white/70">
-              Gunakan Poin
+              Redeem Point
             </label>
             <input
               type="number"
@@ -130,7 +130,7 @@ export default function TransactionPage({
 
           {/* Price Summary */}
           <div className="text-lg font-semibold mb-2">
-            Total Harga Awal:{" "}
+            Price:{" "}
             <span className="text-indigo-400">
               Rp {baseTotal.toLocaleString("id-ID")}
             </span>
@@ -138,12 +138,12 @@ export default function TransactionPage({
 
           {discountAmount > 0 && (
             <div className="text-md text-green-400 mb-2">
-              Diskon: -Rp {discountAmount.toLocaleString("id-ID")}
+              Discount: -Rp {discountAmount.toLocaleString("id-ID")}
             </div>
           )}
 
           <div className="text-xl font-bold mb-6">
-            Total Bayar:{" "}
+            Total Price:{" "}
             <span className="text-indigo-400">
               Rp {finalTotal.toLocaleString("id-ID")}
             </span>

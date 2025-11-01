@@ -14,10 +14,10 @@ export default function AboutUs() {
       <main className="bg-[#071029] text-gray-800 min-h-screen pt-24 pb-16">
         {/* Hero Section */}
         <section className="max-w-6xl mx-auto text-center px-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-indigo-700 mb-4 font-serif">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-indigo-700 mb-4">
             About <span className="text-white/90">Zeuss Event Organizer</span>
           </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto font-serif leading-relaxed">
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto  leading-relaxed">
             Zeuss Event Organizer has been a pioneer in the event management
             industry in Indonesia since 2015. We deliver exceptional experiences
             through meticulous planning, high creativity, and full dedication to
@@ -28,21 +28,19 @@ export default function AboutUs() {
         {/* Journey Section */}
         <section className="max-w-6xl mx-auto mt-16 px-6 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-3xl font-serif font-bold text-indigo-700 mb-4">
+            <h2 className="text-3xl font-bold text-indigo-700 mb-4">
               Our Journey
             </h2>
-            <p className="text-white/90 font-serif leading-relaxed mb-4">
+            <p className="text-white/90  leading-relaxed mb-4">
               Starting as a small, passionate team, Zeuss has now become one of
               Indonesia`s leading event organizers. We have handled various
               large-scale events, from music concerts and international seminars
               to cultural festivals and high-profile product launches.
             </p>
-            <p className="text-white/90 font-serif leading-relaxed">
+            <p className="text-white/90  leading-relaxed">
               With More Than{" "}
-              <span className="font-semibold font-serif">
-                500 successful events
-              </span>
-              , We are committed to continuously creating memorable and unique
+              <span className="font-semibold ">500 successful events</span>, We
+              are committed to continuously creating memorable and unique
               moments for each of our clients.
             </p>
           </div>
@@ -58,10 +56,10 @@ export default function AboutUs() {
 
         {/* Events Showcase */}
         <section className="max-w-6xl mx-auto mt-20 px-6 text-center">
-          <h2 className="text-3xl font-bold font-serif text-indigo-700 mb-6">
+          <h2 className="text-3xl font-bold  text-indigo-700 mb-6">
             Events We Have Handled
           </h2>
-          <div className="grid sm:grid-cols-2 font-serif md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2  md:grid-cols-3 gap-8">
             {[
               { title: "Zeuss Music Fest", img: "/music.jpeg" },
               { title: "Tech Innovate 2024", img: "/tech.jpg" },

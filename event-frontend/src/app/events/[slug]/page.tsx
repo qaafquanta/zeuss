@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Params }) {
                   }}
                 >
                   <div className="w-full bg-gradient-to-t from-black/60 to-transparent p-6">
-                    <h1 className="text-2xl md:text-3xl font-serif font-semibold text-white">
+                    <h1 className="text-2xl md:text-3xl font-semibold text-white">
                       {event.name}
                     </h1>
                     <p className="text-sm text-white/70 mt-1">
@@ -119,7 +119,7 @@ export default async function Page({ params }: { params: Params }) {
               ) : (
                 <div className="w-full h-[420px] bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-800 flex items-center justify-center">
                   <div className="text-center px-6">
-                    <div className="text-3xl font-serif font-semibold mb-3">
+                    <div className="text-3xl font-semibold mb-3">
                       {event.name}
                     </div>
                     <div className="text-sm text-white/70">
@@ -149,7 +149,7 @@ export default async function Page({ params }: { params: Params }) {
             <div className="rounded-xl border border-white/10 bg-white/6 backdrop-blur-[14px] p-6 shadow-xl">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                  <h2 className="text-2xl font-bold text-white mb-2">
                     {event.name}
                   </h2>
                   <p className="text-sm text-white/70 mb-4">

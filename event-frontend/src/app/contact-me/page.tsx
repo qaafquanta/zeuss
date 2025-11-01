@@ -14,7 +14,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-[#071029] flex flex-col items-center justify-center px-6 py-12">
       <div className="max-w-4xl w-full bg-white/80 rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
         {/* Left Section */}
-        <div className="bg-indigo-600 text-white font-serif flex flex-col justify-center p-10">
+        <div className="bg-indigo-600 text-white  flex flex-col justify-center p-10">
           <h1 className="text-3xl font-bold mb-4">Contact Our Office</h1>
           <p className="text-indigo-100 mb-6 leading-relaxed">
             We’d love to hear from you! Whether you have a question, want to
@@ -50,7 +50,7 @@ export default function ContactPage() {
         </div>
 
         {/* Right Section */}
-        <div className="p-10 flex flex-col font-serif justify-center bg-gray-50">
+        <div className="p-10 flex flex-col  justify-center bg-gray-50">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Send us a Message
           </h2>

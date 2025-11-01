@@ -2,7 +2,7 @@ import UpcomingEvents from "./eventsection/upcoming";
 
 export default function Home() {
   return (
-    <main className="font-rethink">
+    <main className="font-rethink mt-16">
       <div
         className="relative w-full h-screen bg-cover bg-center"
         style={{ backgroundImage: "url('/event.jpeg')" }}

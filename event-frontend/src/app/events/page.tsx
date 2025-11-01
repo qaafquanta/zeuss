@@ -91,7 +91,7 @@ export default function EventList() {
         <div className="relative z-10 container mx-auto px-6">
           {/* HEADER + SEARCH BAR */}
           <div className="flex flex-col items-center text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-serif font-semibold text-white/90">
+            <h1 className="text-3xl md:text-4xl font-semibold text-white/90">
               Explore the Best Events Around You
             </h1>
 
@@ -157,7 +157,7 @@ export default function EventList() {
 
                     {/* CONTENT */}
                     <div className="mt-4 mb-4">
-                      <h3 className="text-lg md:text-xl font-serif font-semibold text-white/95 mb-1">
+                      <h3 className="text-lg md:text-xl font-semibold text-white/95 mb-1">
                         {event.name}
                       </h3>
                       <p className="text-sm text-white/70 mb-3 line-clamp-3">
