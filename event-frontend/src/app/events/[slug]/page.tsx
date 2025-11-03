@@ -1,7 +1,7 @@
 // app/event/[id]/page.tsx
 import Link from "next/link";
-import ButtonEventDetail from "@/component/(eventdetail)/buttoneventdetail";
-import { url } from "inspector";
+// import ButtonEventDetail from "@/component/(eventdetail)/buttoneventdetail";
+// import { url } from "inspector";
 
 type Params = {
   slug: string;
