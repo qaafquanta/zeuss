@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import prisma from "../prisma.js";
 import { v4 as uuid } from "uuid";
+import { cloudinary } from "../configs/cloudinary.config.js";
+import { TransactionStatus } from "@prisma/client";
 
 export const createTransaction = async (req: Request, res: Response) => {
   try {
@@ -39,7 +41,7 @@ export const createTransaction = async (req: Request, res: Response) => {
     const discountAmount = 0;
     const userId = (req as any).user.id;
     const transactionId = uuid();
-    await prisma.transaction.create({
+    const transaction = await prisma.transaction.create({
       data: {
         id: transactionId,
         userId,
@@ -54,13 +56,13 @@ export const createTransaction = async (req: Request, res: Response) => {
       },
     });
 
-    await prisma.transactionItem.create({
-      data: {
-        transactionId,
-        quantity,
-        pricePerTicket,
-      },
-    });
+    // await prisma.transactionItem.create({
+    //   data: {
+    //     transactionId,
+    //     quantity,
+    //     pricePerTicket:20000
+    //   },
+    // });
 
     /* --------------------------- update jumlah seat --------------------------- */
     await prisma.event.update({
@@ -77,6 +79,52 @@ export const createTransaction = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error creating transaction:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+/* -------------------------- Upload status payment ------------------------- */
+export const uploadPayment = async (req: Request, res: Response) => {
+  try {
+    const { transactionId } = req.body;
+    const paymentProof = req.file;
+    if (!paymentProof) {
+      return res.status(400).json({ message: "Profile picture not found" });
+    }
+    const uploadResult = await cloudinary.uploader.upload(paymentProof?.path);
+    await prisma.transaction.update({
+      where: { id: transactionId },
+      data: {
+        paymentProof: uploadResult.secure_url,
+        status: "WAITING_CONFIRMATION",
+      },
+    });
+    res.status(201).json({
+      success: true,
+      message: "Payment proof successfully",
+    });
+  } catch (error) {
+    console.error("Error uploading payment proof:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+export const getTransactionById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const event = await prisma.transaction.findUnique({
+      where: { id: String(id) },
+    });
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Event not found" });
+    }
+
+    res.json({ success: true, data: event });
+  } catch (error) {
+    console.error("Error uploading payment proof:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
