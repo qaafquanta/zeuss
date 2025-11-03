@@ -61,15 +61,23 @@ export class AuthController implements IAuthController {
             // console.log('user terdeteksi menggunakan referral code: point di create')
             await prisma.point.create({
                 data:{
-                    userId,
+                    userId:referredById1,
                     amount: 10000,
                     expiresAt: getThreeMonthsFromNow(),
                     isUsed: false
                 }
             })
+
+            await prisma.coupon.create({data:{
+                userId,
+                
+            }})
         }else{
             // console.log('user terdeteksi tidak menggunakan referral code: point tidak di create')
         }
+
+        //Create Coupon [Coupon Type: Referral : 5%]
+
         
 
         res.status(200).send({

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import cookieParser from "cookie-parser";
- 
+  
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -47,7 +47,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="font-rethink min-h-screen flex items-center justify-center  bg-[#071029] p-6">
+    <main className="font-rethink min-h-screen flex items-center justify-center bg-[#071029] p-6">
       <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 max-w-md w-full border border-white/20">
         <h1 className="text-3xl font-bold text-white  text-center mb-6 tracking-wide">
           Welcome To Zeuss
