@@ -28,6 +28,7 @@ export const createTransaction = async (req: Request, res: Response) => {
 
     const totalPrice = event.price * quantity;
 
+
     /* -------------------------- Simpan transaksi baru ------------------------- */
     function getTwoHoursFromNow(): Date {
       const now = new Date();
@@ -58,7 +59,8 @@ export const createTransaction = async (req: Request, res: Response) => {
       data: {
         transactionId,
         quantity,
-        pricePerTicket,
+        pricePerTicket: event.price,
+        subtotal: event.price * quantity
       },
     });
 
@@ -69,14 +71,46 @@ export const createTransaction = async (req: Request, res: Response) => {
         availableSeats: event.availableSeats - quantity,
       },
     });
+    //>>>>>>>>> implementasi cron job
 
     res.status(201).json({
       success: true,
-      message: "Transaction created successfully",
-      data: transaction,
+      message: "Transaction created successfully"
     });
   } catch (error) {
     console.error("Error creating transaction:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const uploadPayment = async(req:Request, res:Response)=>{
+  try{
+    const {transactionId,paymentProof} = req.body //Payment proof harus di multer
+    await prisma.transaction.update({
+      where: {id:transactionId},
+      data:{
+        paymentProof,
+        status: "WAITING_CONFIRMATION"
+      }
+    })
+  }catch(error){
+    console.error("Error uploading payment proof", error);
+    res.status(500).json({success: false, message: "Internal Server Error"})
+  }
+}
+
+export const verifyPayment = async(req:Request, res:Response)=>{
+  try{
+    const { confirm,transactionId} = req.body
+
+    prisma.transaction.update({
+      where: { id : transactionId},
+      data: {
+        status: confirm ? "DONE" : "REJECTED"
+      }
+    })
+  }catch(error){
+    console.error("Error verifying payment", error);
+    res.status(500).json({success: false, message: "Internal Server Error"})
+  }
+}
