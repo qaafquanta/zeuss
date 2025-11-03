@@ -76,7 +76,8 @@ export const createTransaction = async (req: Request, res: Response) => {
 
     res.status(201).json({
       success: true,
-      message: "Transaction created successfully"
+      message: "Transaction created successfully",
+      data: transaction
     });
   } catch (error) {
     console.error("Error creating transaction:", error);
