@@ -80,12 +80,16 @@ export default function Navbar() {
         >
           {open ? <X size={28} /> : <Menu size={28} />}
         </button>
-        {/* {user ? (
-          <div className="flex gap-5">
+        {
+          user ? 
+          (<div className="flex gap-5 justify-center items-center">
             <span>{user.username}</span>
-            <button onClick={handleLogout} className="hover:bg-white/20">
-              Logout
-            </button>
+            <span className="bg-white/10 rounded-full text-xs justify-center items-center py-1 px-3">{user.role}</span>
+            <button
+              onClick={handleLogout}
+              className="hover:bg-white/20"
+            >Logout
+            </button> 
           </div>
         ) : (
           <p></p>

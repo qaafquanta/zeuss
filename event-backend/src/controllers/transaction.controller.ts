@@ -30,6 +30,7 @@ export const createTransaction = async (req: Request, res: Response) => {
 
     const totalPrice = event.price * quantity;
 
+
     /* -------------------------- Simpan transaksi baru ------------------------- */
     function getTwoHoursFromNow(): Date {
       const now = new Date();
@@ -71,11 +72,11 @@ export const createTransaction = async (req: Request, res: Response) => {
         availableSeats: event.availableSeats - quantity,
       },
     });
+    //>>>>>>>>> implementasi cron job
 
     res.status(201).json({
       success: true,
-      message: "Transaction created successfully",
-      data: transaction,
+      message: "Transaction created successfully"
     });
   } catch (error) {
     console.error("Error creating transaction:", error);
