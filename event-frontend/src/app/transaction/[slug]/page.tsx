@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import TransactionStatus from "@/app/transaction-status/[slug]/page";
 
 export default function TransactionPage({
   params,
@@ -35,7 +36,7 @@ export default function TransactionPage({
     setDiscountAmount(discount);
   };
 
-  const handleBooking = async () => {
+  const TransactionStatus = async () => {
     try {
       const res = await fetch(
         "http://localhost:8099/transaction/create-transaction",
@@ -56,7 +57,7 @@ export default function TransactionPage({
       const data = await res.json();
 
       if (res.ok) {
-        router.push(`/payment/${data?.data?.transactionId}`);
+        router.push(`/transaction-status/${data?.data?.id}`);
       } else {
         alert(data?.message ?? "Failed to book seat");
       }
@@ -150,7 +151,7 @@ export default function TransactionPage({
           </div>
 
           <button
-            onClick={handleBooking}
+            onClick={TransactionStatus}
             className="w-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:scale-[1.02] transition"
           >
             Continue To Payment

@@ -1,11 +1,18 @@
 import { Router } from "express";
-import { createTransaction, uploadPayment, verifyPayment } from "../controllers/transaction.controller.js";
+import {
+  createTransaction,
+  uploadPayment,
+  getTransactionById,
+} from "../controllers/transaction.controller.js";
 import { verifyToken } from "../utils/verifyToken.js";
+import { fileUpload } from "../middlewares/file-upload.js";
 
 const router = Router();
 
-router.post("/create", verifyToken, createTransaction);
-router.post("/upload-payment",uploadPayment);
-router.post("/verify-payment",verifyPayment)
+router.post("/create-transaction", verifyToken, createTransaction);
+router.get("/:id", getTransactionById);
+router
+  .route("/upload-payment")
+  .post(fileUpload.single("paymentProof"), uploadPayment);
 
 export default router;

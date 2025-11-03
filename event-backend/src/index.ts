@@ -7,7 +7,6 @@ import express, { urlencoded, type Express } from "express";
 import authRouter from "./routes/auth.route.js";
 import eventRouter from "./routes/event.route.js";
 import transactionRoute from "./routes/transaction.route.js";
-// import uploadRoute from "./routes/upload.route.js";
 
 const PORT = process.env.PORT;
 
@@ -36,7 +35,7 @@ const app: Application = express();
 //define app basic middleware
 app.use(
   cors({
-    origin: ["http://localhost:8099","http://localhost:3000"], // alamat frontend
+    origin: ["http://localhost:8099", "http://localhost:3000"], // alamat frontend
     credentials: true, // penting agar cookie bisa dikirim
   })
 );
@@ -51,7 +50,6 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/auth", authRouter);
 app.use("/event", eventRouter);
 app.use("/transaction", transactionRoute);
-// app.use("/api", uploadRoute);
 
 //error middleware
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
