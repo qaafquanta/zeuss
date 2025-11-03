@@ -50,7 +50,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/auth", authRouter);
 app.use("/event", eventRouter);
-app.use("/api/transaction", transactionRoute);
+app.use("/transaction", transactionRoute);
 // app.use("/api", uploadRoute);
 
 //error middleware
