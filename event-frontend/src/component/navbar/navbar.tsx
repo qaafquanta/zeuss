@@ -80,20 +80,22 @@ export default function Navbar() {
         >
           {open ? <X size={28} /> : <Menu size={28} />}
         </button>
-        {
-          user ? 
-          (<div className="flex gap-5 justify-center items-center">
+        {user ? (
+          <div className="flex gap-5 justify-center items-center font-bold">
             <span>{user.username}</span>
-            <span className="bg-white/10 rounded-full text-xs justify-center items-center py-1 px-3">{user.role}</span>
+            <span className="bg-white/10 rounded-full text-xs justify-center font-bold items-center py-1 px-3">
+              {user.role}
+            </span>
             <button
               onClick={handleLogout}
-              className="hover:bg-white/20"
-            >Logout
-            </button> 
+              className="hover:text-indigo-600 underline-animate transition font-bold"
+            >
+              Logout
+            </button>
           </div>
         ) : (
           <p></p>
-        )} 
+        )}
       </div>
 
       {open && (
@@ -102,7 +104,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="block px-6 py-3 text-gray-700 hover:text-indigo-600 underline-animate transition"
+              className="block px-6 py-3 text-gray-700 "
               onClick={() => setOpen(false)}
             >
               {link.name}

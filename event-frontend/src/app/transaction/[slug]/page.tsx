@@ -26,7 +26,6 @@ export default function TransactionPage({
   const redeemValue = points * 100;
 
   // total akhir
-  console.log(baseTotal, voucherDiscount, redeemValue);
   const finalTotal = Math.max(baseTotal - voucherDiscount - redeemValue, 0);
 
   //Input voucher
