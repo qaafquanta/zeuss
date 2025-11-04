@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.route.js";
 import eventRouter from "./routes/event.route.js";
 import transactionRoute from "./routes/transaction.route.js";
 import expiringTransactions from "./jobs/cronjobs.js";
+import organizerRoute from "./routes/event.route.js";
 
 const PORT = process.env.PORT;
 
