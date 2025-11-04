@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import TransactionStatus from "@/app/transaction-status/[slug]/page";
 
 export default function TransactionPage({
   params,
@@ -15,28 +14,54 @@ export default function TransactionPage({
   const [seatCount, setSeatCount] = useState(1);
   const [voucherCode, setVoucherCode] = useState("");
   const [points, setPoints] = useState(0);
-  const [discountAmount, setDiscountAmount] = useState(0);
+  const [voucherDiscount, setVoucherDiscount] = useState(0);
+  const [voucherMessage, setVoucherMessage] = useState("");
+  const [isApplying, setIsApplying] = useState(false);
 
+  // harga dasar
   const pricePerSeat = 20000;
   const baseTotal = seatCount * pricePerSeat;
-  const finalTotal = Math.max(baseTotal - discountAmount, 0);
 
-  const applyDiscount = () => {
-    let discount = 0;
+  // nilai poin: 1 poin = Rp100
+  const redeemValue = points * 100;
 
-    // contoh logika sederhana
-    if (voucherCode.toUpperCase() === "DISKON10") {
-      discount += baseTotal * 0.1; // 10%
+  // total akhir
+  console.log(baseTotal, voucherDiscount, redeemValue);
+  const finalTotal = Math.max(baseTotal - voucherDiscount - redeemValue, 0);
+
+  //Input voucher
+  const applyVoucher = async () => {
+    setIsApplying(true);
+    setVoucherMessage("");
+
+    try {
+      const res = await fetch(
+        `http://localhost:8099/transaction/voucher?code=${voucherCode.toUpperCase()}`,
+        {
+          method: "POST",
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data?.message || "Voucher tidak valid");
+
+      setVoucherDiscount(data.voucher.discountAmount);
+      setVoucherMessage(
+        `Voucher diterapkan: potongan Rp ${data.voucher.discountAmount.toLocaleString(
+          "id-ID"
+        )}`
+      );
+    } catch (err: any) {
+      setVoucherDiscount(0);
+      setVoucherMessage(err.message || "Voucher tidak valid");
+    } finally {
+      setIsApplying(false);
     }
-
-    if (points > 0) {
-      discount += points * 100; // 1 poin = Rp100
-    }
-
-    setDiscountAmount(discount);
   };
 
-  const TransactionStatus = async () => {
+  //Handle transaction
+  const handleTransaction = async () => {
     try {
       const res = await fetch(
         "http://localhost:8099/transaction/create-transaction",
@@ -75,7 +100,7 @@ export default function TransactionPage({
           <p className="text-sm text-white/60 mb-4">Event ID: {slug}</p>
 
           {/* Seat Counter */}
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-4 mb-6 justify-center">
             <button
               onClick={() => setSeatCount((c) => Math.max(1, c - 1))}
               className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 transition text-xl font-bold"
@@ -106,52 +131,80 @@ export default function TransactionPage({
                 className="flex-1 p-2 rounded-lg bg-white/10 border border-white/20 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               />
               <button
-                onClick={applyDiscount}
+                onClick={applyVoucher}
                 type="button"
-                className="px-4 bg-indigo-500 rounded-lg hover:bg-indigo-600 transition"
+                disabled={isApplying}
+                className={`px-4 rounded-lg transition ${
+                  isApplying
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-indigo-500 hover:bg-indigo-600"
+                }`}
               >
-                Apply
+                {isApplying ? "..." : "Apply"}
               </button>
             </div>
+            {voucherMessage && (
+              <p
+                className={`text-sm mt-1 ${
+                  voucherDiscount > 0 ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {voucherMessage}
+              </p>
+            )}
           </div>
 
           {/* Point Input */}
-          <div className="mb-4">
+          <div className="mb-6">
             <label className="block text-sm mb-1 text-white/70">
               Redeem Point
             </label>
             <input
               type="number"
               value={points}
-              onChange={(e) => setPoints(parseInt(e.target.value) || 0)}
+              onChange={(e) =>
+                setPoints(Math.max(0, parseInt(e.target.value) || 0))
+              }
               placeholder="Masukkan jumlah poin"
               className="w-full p-2 rounded-lg bg-white/10 border border-white/20 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
 
           {/* Price Summary */}
-          <div className="text-lg font-semibold mb-2">
-            Price:{" "}
-            <span className="text-indigo-400">
-              Rp {baseTotal.toLocaleString("id-ID")}
-            </span>
+          <div className="space-y-2 text-md mb-6">
+            <p>
+              Price:{" "}
+              <span className="text-indigo-400">
+                Rp {baseTotal.toLocaleString("id-ID")}
+              </span>
+            </p>
+            {voucherDiscount > 0 && (
+              <p>
+                Voucher Discount:{" "}
+                <span className="text-green-400">
+                  - Rp {voucherDiscount.toLocaleString("id-ID")}
+                </span>
+              </p>
+            )}
+            {points > 0 && (
+              <p>
+                Redeem Points:{" "}
+                <span className="text-green-400">
+                  - Rp {redeemValue.toLocaleString("id-ID")}
+                </span>
+              </p>
+            )}
+            <p className="text-xl font-bold">
+              Total Price:{" "}
+              <span className="text-indigo-400">
+                Rp {finalTotal.toLocaleString("id-ID")}
+              </span>
+            </p>
           </div>
 
-          {discountAmount > 0 && (
-            <div className="text-md text-green-400 mb-2">
-              Discount: -Rp {discountAmount.toLocaleString("id-ID")}
-            </div>
-          )}
-
-          <div className="text-xl font-bold mb-6">
-            Total Price:{" "}
-            <span className="text-indigo-400">
-              Rp {finalTotal.toLocaleString("id-ID")}
-            </span>
-          </div>
-
+          {/* Submit Button */}
           <button
-            onClick={TransactionStatus}
+            onClick={handleTransaction}
             className="w-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:scale-[1.02] transition"
           >
             Continue To Payment

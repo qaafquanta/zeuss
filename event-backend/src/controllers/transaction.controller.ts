@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+
 import prisma from "../prisma.js";
 import { v4 as uuid } from "uuid";
 import { cloudinary } from "../configs/cloudinary.config.js";
@@ -29,7 +30,6 @@ export const createTransaction = async (req: Request, res: Response) => {
     }
 
     const totalPrice = event.price * quantity;
-
 
     /* -------------------------- Simpan transaksi baru ------------------------- */
     function getTwoHoursFromNow(): Date {
@@ -77,7 +77,7 @@ export const createTransaction = async (req: Request, res: Response) => {
     res.status(201).json({
       success: true,
       message: "Transaction created successfully",
-      data: transaction
+      data: transaction,
     });
   } catch (error) {
     console.error("Error creating transaction:", error);
@@ -130,3 +130,20 @@ export const getTransactionById = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+/* ---------------------------- Voucher Dan Point --------------------------- */
+
+export async function getDiscountByVoucher(req: Request, res: Response) {
+  const vouchers = [
+    { code: "DISKON10", discountAmount: 10000 },
+    { code: "DISKON20", discountAmount: 20000 },
+  ];
+
+  const code = req.query.code;
+  const voucher = vouchers.find((v) => v.code == code);
+
+  if (!voucher)
+    return res.status(404).json({ message: "Voucher tidak ditemukan" });
+
+  return res.status(200).json({ voucher: voucher });
+}
