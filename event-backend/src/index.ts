@@ -7,27 +7,10 @@ import express, { urlencoded, type Express } from "express";
 import authRouter from "./routes/auth.route.js";
 import eventRouter from "./routes/event.route.js";
 import transactionRoute from "./routes/transaction.route.js";
+import expiringTransactions from "./jobs/cronjobs.js";
+import organizerRoute from "./routes/event.route.js";
 
 const PORT = process.env.PORT;
-
-// export default class App {
-//     private app: Express;
-
-//     constructor(){
-//         this.app = express();
-//         this.configure();
-//     }
-
-//     private configure():void{
-//         this.app.use(cors());
-//         this.app.use(express.json());
-//         // this.app.use(urlencoded({extended:true}));
-//     }
-
-//     public start():void{
-//         this.app.listen(PORT,()=>{console.info("API RUNNING ON PORT",PORT)})
-//     }
-// }
 
 //define app server
 const app: Application = express();
@@ -68,6 +51,8 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 //     }
 // }
 // )
+
+expiringTransactions();
 
 //run app server
 app.listen(PORT, () => {

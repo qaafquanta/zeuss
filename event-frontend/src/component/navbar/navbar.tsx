@@ -81,7 +81,7 @@ export default function Navbar() {
           </Link>
         ) : (
           <p></p>
-        )} 
+        )}
       </div>
 
       {open && (
@@ -90,7 +90,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="block px-6 py-3 text-gray-700 hover:text-indigo-600 underline-animate transition"
+              className="block px-6 py-3 text-gray-700 "
               onClick={() => setOpen(false)}
             >
               {link.name}

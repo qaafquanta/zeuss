@@ -3,6 +3,7 @@ import {
   createTransaction,
   uploadPayment,
   getTransactionById,
+  getDiscountByVoucher,
   getPaymentProofByOrganizerIdFromCookies,
   rejectPayment,
   acceptPayment
@@ -14,6 +15,7 @@ const router = Router();
 
 router.get("/proof",verifyToken,getPaymentProofByOrganizerIdFromCookies)
 router.post("/create-transaction", verifyToken, createTransaction);
+router.post("/voucher", getDiscountByVoucher);
 router.get("/:id", getTransactionById);
 router
   .route("/upload-payment")

@@ -13,6 +13,15 @@ export const getAllEvents = async (req: Request, res: Response) => {
     const skip = (Number(page) - 1) * Number(limit);
 
     const events = await prisma.event.findMany({
+      include: {
+        organizer: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
       skip,
       take: Number(limit),
       orderBy: { createdAt: "desc" },
@@ -83,6 +92,15 @@ export const filterAllEvents = async (req: Request, res: Response) => {
         skip,
         take: Number(limit),
         orderBy: { createdAt: "desc" },
+        include: {
+          organizer: {
+            select: {
+              id: true,
+              username: true,
+              email: true,
+            },
+          },
+        },
       }),
       prisma.event.count({ where }),
     ]);
