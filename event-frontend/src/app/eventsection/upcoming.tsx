@@ -31,7 +31,7 @@ export default function UpcomingEvents() {
   console.log(events);
 
   return (
-    <section className="py-16 px-5 md:px-20 bg-black font-rethink">
+    <section className="py-16 px-5 md:px-20 bg-[#071029] font-rethink">
       <h2 className="text-3xl md:text-4xl font-bold mb-10 text-transparent bg-gradient-to-br from-indigo-300 via-indigo-700 to-indigo-900 bg-clip-text">
         Upcoming Events
       </h2>
