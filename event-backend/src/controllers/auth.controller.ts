@@ -5,12 +5,14 @@ import {compare} from 'bcrypt'
 import {createToken} from "../utils/createToken.js"
 import {v4 as uuid} from 'uuid'
 import { getThreeMonthsFromNow } from "../functions/function.js";
+import { cloudinary } from "../configs/cloudinary.config.js";
 
 export interface IAuthController {
     register(req: Request, res: Response,next:NextFunction): Promise<void>
     login(req: Request, res: Response,next:NextFunction): Promise<void>
     authCheck(req: Request, res: Response,next:NextFunction): Promise<void>
     logout(req: Request, res: Response,next:NextFunction): Promise<void>
+    editProfile(req: Request, res: Response,next:NextFunction): Promise<void>
 }
 
 export class AuthController implements IAuthController {
@@ -70,7 +72,9 @@ export class AuthController implements IAuthController {
 
             await prisma.coupon.create({data:{
                 userId,
-                
+                code: uuid(),
+                discountPercent: 50,
+                expiresAt: getThreeMonthsFromNow(),
             }})
         }else{
             // console.log('user terdeteksi tidak menggunakan referral code: point tidak di create')
@@ -140,7 +144,9 @@ export class AuthController implements IAuthController {
             user: {
             username: user?.username,
             email: user?.email,
-            role: user?.role
+            role: user?.role,
+            profilePicture: user?.profilePicture,
+            referralNumber: user?.referralNumber
             },
         });
     };
@@ -154,4 +160,47 @@ export class AuthController implements IAuthController {
         });
         res.status(200).json({ message: "Logged out" });
     }
+
+    // CREATE event baru
+    async editProfile(req: Request, res: Response,next:NextFunction){
+      try {
+        console.log(req.body);
+        const {
+          email,
+          username,
+        } = req.body;
+
+        const userId = (req as any).user.id;
+        
+        console.log(userId)
+        console.log(email)
+        console.log(username)
+
+        const profilePicture = req.file;
+    
+        // if (!photoProfile) {
+        //   return res.status(400).json({ message: "Profile picture not found" });
+        // }
+        let uploadResult = {secure_url:""}
+
+        if(profilePicture){
+            uploadResult = await cloudinary.uploader.upload(profilePicture?.path);
+        }
+        
+    
+        await prisma.user.update({
+          data: {
+            email,
+            username,
+            profilePicture: uploadResult.secure_url,
+          },
+          where:{id: userId}
+        });
+    
+        res.status(201).json({ success: true});
+      } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+      }
+    };
 }
