@@ -130,3 +130,77 @@ export const getTransactionById = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+export const getPaymentProofByOrganizerIdFromCookies = async (req: Request, res: Response) => {
+  try{
+    const userId = (req as any).user.id;
+    const events = await prisma.event.findMany({where: {organizerId: userId}, include: {transactions: 
+      {where: 
+        {  
+        paymentProof: {
+          // not: null,          // tidak null.     // ini nanti diganti kalo paymentproof pada prisma dibuat opsional (?)
+          notIn: ["", " "],   // dan tidak string kosong (opsional)
+        },
+      },
+      include: {
+        event: {
+          select: {
+            name: true,
+          },
+        },
+        user:{
+          select:{
+            username:true
+          }
+        }
+    },
+    }
+    }})
+    
+    res.json({ success: true, data: events });
+  }catch (error) {
+    console.error("Error fetching payment proof", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+export const acceptPayment = async (req: Request, res: Response) => {
+  try{
+    const {transactionId} = req.body
+    console.log(req.body)
+    await prisma.transaction.update({
+      where: { id: transactionId },
+      data: {
+        status: "DONE",
+      },
+    });
+    res.status(200).json({
+      success: true,
+      message: "Payment accepted successfully",
+    });
+  }catch(error) {
+    console.error("Error accepting proof", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+}
+
+export const rejectPayment = async (req: Request, res: Response) => {
+  try{
+    const {transactionId} = req.body
+    await prisma.transaction.update({
+      where: { id: transactionId },
+      data: {
+        status: "REJECTED",
+      },
+    });
+    res.status(200).json({
+      success: true,
+      message: "Payment rejected successfully",
+    });
+    //[FUNGSI MENGEMBALIKAN SEAT,REFUND VOUCHER,REFUND COUPON,REFUND POINT]
+  }catch(error) {
+    console.error("Error accepting proof", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+}
+

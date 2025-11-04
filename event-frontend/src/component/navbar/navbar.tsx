@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -19,6 +20,8 @@ export default function Navbar() {
     username: string;
     email: string;
     role: string;
+    profilePicture?: string;
+    referralNumber: string;
   }
 
   const [user, setUser] = useState<User | null>(null);
@@ -42,18 +45,7 @@ export default function Navbar() {
     checkLogin();
   }, []);
 
-  const handleLogout = async () => {
-    const res = await fetch("http://localhost:8099/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-    const data = res.json();
-    console.log(data);
-    if (res.ok) {
-      setUser(null);
-      alert("berhasil logout");
-    }
-  };
+  
 
   return (
     <nav className="font-rethink fixed top-0 left-0 w-full z-50 bg-gray-900 backdrop-blur-md shadow-sm">
@@ -82,15 +74,11 @@ export default function Navbar() {
         </button>
         {
           user ? 
-          (<div className="flex gap-5 justify-center items-center">
-            <span>{user.username}</span>
-            <span className="bg-white/10 rounded-full text-xs justify-center items-center py-1 px-3">{user.role}</span>
-            <button
-              onClick={handleLogout}
-              className="hover:bg-white/20"
-            >Logout
-            </button> 
-          </div>
+          (<Link href="/profile" className="flex gap-5 justify-center items-center">
+            <span className="bg-white/10 opacity-90 rounded-full text-xs justify-center items-center py-1 px-3">{user.role}</span>
+            <span className="hover:underline hover:text-white font-bold text-white/80">{user.username}</span>
+            <Image src={user.profilePicture?user.profilePicture:"/photoprofile.png"} alt="pp" height={40} width={40} className="circle-border-animate object-cover rounded-full border-[0.5px] border-white/10 hover:border-indigo-600 hover:border-1 transition"/>
+          </Link>
         ) : (
           <p></p>
         )} 
