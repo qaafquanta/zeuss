@@ -3,8 +3,8 @@ import prisma from "../prisma.js";
 
 export default function expiringTransactions() {
   cron.schedule("*/10 * * * * *", async () => {
-    console.log("Checking for expired orders...");
     const now = new Date();
+    console.log("Checking for expired orders...",now);
 
     const expiredTransactions = await prisma.transaction.findMany({
       where: {

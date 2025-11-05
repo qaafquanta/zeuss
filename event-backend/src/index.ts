@@ -7,6 +7,7 @@ import express, { urlencoded, type Express } from "express";
 import authRouter from "./routes/auth.route.js";
 import eventRouter from "./routes/event.route.js";
 import transactionRoute from "./routes/transaction.route.js";
+import redeemRouter from "./routes/redeem.route.js"
 import expiringTransactions from "./jobs/cronjobs.js";
 import organizerRoute from "./routes/event.route.js";
 
@@ -33,6 +34,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/auth", authRouter);
 app.use("/event", eventRouter);
 app.use("/transaction", transactionRoute);
+app.use("/redeem",redeemRouter)
 
 //error middleware
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {

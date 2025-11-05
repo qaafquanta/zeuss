@@ -4,7 +4,6 @@ import React, { useState } from "react";
 
 export default function EventForm() {
   const [formData, setFormData] = useState({
-    organizerId: "",
     name: "",
     description: "",
     category: "",
@@ -38,7 +37,6 @@ export default function EventForm() {
     e.preventDefault();
 
     const form = new FormData();
-    form.append("organizerId", formData.organizerId);
     form.append("name", formData.name);
     form.append("description", formData.description);
     form.append("category", formData.category);
@@ -59,6 +57,7 @@ export default function EventForm() {
       const res = await fetch("http://localhost:8099/event/create", {
         method: "POST",
         body: form,
+        credentials: "include",
       });
 
       if (!res.ok) throw new Error("Upload gagal");
@@ -67,7 +66,6 @@ export default function EventForm() {
 
       // reset form
       setFormData({
-        organizerId: "",
         name: "",
         description: "",
         category: "",
@@ -98,13 +96,6 @@ export default function EventForm() {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <input
-            name="organizerId"
-            placeholder="Organizer ID"
-            value={formData.organizerId}
-            onChange={handleChange}
-            className="input-style"
-          />
           <input
             name="name"
             placeholder="Event Name"
