@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState} from "react";
+import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from "lucide-react";
 import cookieParser from "cookie-parser";
   
@@ -10,7 +11,7 @@ export default function LoginPage() {
     email:"",
     password:""
   })
-
+  const router = useRouter()
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -30,6 +31,7 @@ export default function LoginPage() {
           email:"",
           password:""
         })
+        router.replace("/profile")
       }
 
     }catch(error){

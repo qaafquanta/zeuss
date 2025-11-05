@@ -20,6 +20,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node-cron": "^3.0.11",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
     "@types/streamifier": "^0.1.2",
     "@types/uuid": "^10.0.0",
     "cookie-parser": "^1.4.7",
