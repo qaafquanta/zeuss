@@ -1,41 +1,65 @@
 "use client";
 
-import React, { useState } from "react";
+import Image from "next/image";
+import React, { useState,useEffect } from "react";
 
 export default function ConfirmPayment() {
-const paymentToConfirms = [
-    {username: "queen", eventName:"Tenxi Fest",createdAt: new Date()},
-    {username: "qaaf",eventName:"MPL ID Playoff",createdAt: new Date()},
-    {username: "quency",eventName:"MPL PH Regular Season",createdAt: new Date()},
-]
+
+const [events,setEvents] = useState([])
+
+const fetchEvent = async () => {
+      try {
+        const res = await fetch("http://localhost:8099/event/organizer-cookie", {
+          credentials: "include", // biar dapet cookie
+        });
+        const json = await res.json();
+        console.log(json)
+        
+        setEvents(json.events);
+        console.log(events)
+      } catch (err) {
+        setEvents([]); // token tidak valid atau belum login
+      }
+    };
+
+useEffect(() => {
+    fetchEvent();
+  }, []);
+  
+
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const openModal = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const closeModal = () => {
+    setSelectedEvent(null);
+  };
   return (
     <section className="h-fit w-full  gap-0 flex flex-col justify-start items-center border border-white/10 rounded-lg overflow-hidden m-3 mt-19">
         <div className="w-full h-12 grid grid-cols-5 font-bold text-white bg-gradient-to-r from-indigo-700/25 to-indigo-600/10 border-b border-white/10">
-            <div className=" flex justify-center items-center backdrop-blur-lg shadow-2xl ">Payment Proof</div>
-            <div className=" flex justify-center items-center backdrop-blur-lg shadow-2xl ">Username</div>
-            <div className=" flex justify-center items-center backdrop-blur-lg  shadow-2xl ">Event</div>
-            <div className=" flex justify-center items-center backdrop-blur-lg  shadow-2xl ">Time</div>
-            <div className=" flex justify-center items-center backdrop-blur-lg  shadow-2xl ">Yay or Nay</div>
+            <div className=" flex justify-center items-center backdrop-blur-lg shadow-2xl ">Event</div>
+            <div className=" flex justify-center items-center backdrop-blur-lg shadow-2xl ">Total Seats</div>
+            <div className=" flex justify-center items-center backdrop-blur-lg  shadow-2xl ">Avaiable Seats</div>
+            <div className=" flex justify-center items-center backdrop-blur-lg  shadow-2xl ">Category</div>
+            <div className=" flex justify-center items-center backdrop-blur-lg  shadow-2xl ">Description</div>
         </div>
     {
-        paymentToConfirms.map((paymentToConfirm,index)=>{
+        (!events) ?<div>gaada proofnya</div>:
+        events.map((event,index)=>{
             return (
-                <div key={index}className="text-sm w-full h-12 grid grid-cols-5 bg-gradient-to-r from-white/2 to-white/1 text-white backdrop-blur-lg shadow-xl">
-                     <div className=" flex justify-center items-center">
-                        <button className="hover:cursor-pointer rounded-sm px-4 py-1 bg-gray-900 hover:bg-gray-800 flex justify-center items-center backdrop-blur-lg border border-gray-700 hover:border-gray-600 shadow-lg text-xs text-white/80 transition">View Payment Proof</button>
-                     </div>
-                    <div className=" flex justify-start px-5 items-center">{paymentToConfirm.username}</div>
-                    <div className="flex justify-start px-5 items-center">{paymentToConfirm.eventName}</div>
-                    <div className="flex justify-start px-5 items-center">31/10/2025 16:55</div>
-                    <div className=" flex gap-5  justify-center items-center">
-                        <button className="hover:cursor-pointer rounded-sm px-4 py-1 bg-gradient-to-r from-green-900/90 to-green-800/70 hover:bg-green-800 flex justify-center items-center backdrop-blur-lg border border-green-700/70 hover:border-green-600 shadow-lg text-xs text-white transition">Accept</button>
-                        <button className="hover:cursor-pointer rounded-sm px-4 py-1 bg-gradient-to-r from-red-900/90 to-red-800/70 hover:bg-red-800 flex justify-center items-center backdrop-blur-lg border border-red-700/70 hover:border-red-600 shadow-lg text-xs text-white transition">Reject</button>
-                       </div>
+                <div key={index} onClick={() => openModal(event)} className={` transition hover:bg-white/5 hover:cursor-pointer text-sm w-full h-12 grid grid-cols-5 bg-gradient-to-r from-white/2 to-white/1 text-white backdrop-blur-lg shadow-xl`}>
+                    <div className=" flex justify-start px-5 items-center">{event?.name}</div>
+                    <div className=" flex justify-start px-5 items-center">{event?.totalSeats}</div>
+                    <div className="flex justify-start px-5 items-center">{event?.availableSeats}</div>
+                    <div className="flex justify-start px-5 items-center">{event?.category}</div>
+                    <div className=" flex justify-start px-5 items-center">desc</div>                   
                 </div>
             )
         })
     }
-      
+    
     </section>
   );
 }

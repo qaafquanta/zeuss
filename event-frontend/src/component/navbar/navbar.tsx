@@ -64,6 +64,17 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+          {
+          user ? user.role === "ORGANIZER" && (
+            <Link
+              href="/dashboard"
+              className="text-gray-300 hover:text-indigo-500 underline-animate font-bold transition"
+            >
+              Dashboard
+            </Link>
+          )
+          :<p></p>
+        }
         </div>
 
         <button

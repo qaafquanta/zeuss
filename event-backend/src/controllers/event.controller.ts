@@ -144,7 +144,6 @@ export const createEvent = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
     const {
-      organizerId,
       name,
       description,
       category,
@@ -157,6 +156,8 @@ export const createEvent = async (req: Request, res: Response) => {
       availableSeats,
       totalSeats,
     } = req.body;
+
+    const organizerId = (req as any).user.id;
 
     const imageUrl = req.file;
 
